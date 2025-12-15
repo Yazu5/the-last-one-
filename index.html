@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>A Letter for You</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Handwritten Font -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #1f1f1f, #0f0f0f);
+    padding: 20px;
+    user-select: none; /* disables copying */
+  }
+
+  .paper {
+    background: #fdf6e3;
+    max-width: 650px;
+    width: 90%;
+    height: 90vh;
+    padding: 40px 35px;
+    border-radius: 14px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    font-family: 'Dancing Script', cursive;
+    color: #3a2f2f;
+    overflow-y: auto;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 25px;
+  }
+
+  p {
+    font-size: 22px;
+    line-height: 1.9;
+    white-space: pre-wrap; /* preserves line breaks */
+    margin-bottom: 1.8em;
+  }
+
+  .signature {
+    margin-top: 35px;
+    text-align: right;
+    font-size: 24px;
+    font-style: italic;
+  }
+
+  .tap {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.6;
+  }
+
+  /* hide scrollbar for webkit */
+  .paper::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- Background music -->
+<audio id="music" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<div class="paper" id="letter">
+  <h1>To You</h1>
+  <div id="content"></div>
+  <div class="tap">Tap anywhere to play music</div>
+</div>
+
+<script>
+const music = document.getElementById("music");
+const contentDiv = document.getElementById("content");
+
+// Play music on first touch/click
+function playMusic() {
+    music.play().catch(()=>{});
+}
+document.body.addEventListener("click", playMusic, { once: true });
+document.body.addEventListener("touchstart", playMusic, { once: true });
+
+// Load letter from text file
+fetch('letter.txt')
+  .then(response => response.text())
+  .then(text => {
+    const paragraphs = text.split(/\n\s*\n/); // split on empty lines for paragraphs
+    paragraphs.forEach(p => {
+      const para = document.createElement('p');
+      para.textContent = p.trim();
+      contentDiv.appendChild(para);
+    });
+  })
+  .catch(err => console.error("Failed to load letter:", err));
+</script>
+
+</body>
+</html>
